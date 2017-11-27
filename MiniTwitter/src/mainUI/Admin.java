@@ -3,6 +3,10 @@ package mainUI;
 import design.*;
 import info.*;
 import java.awt.Frame;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import javax.swing.tree.DefaultTreeModel;
 
 /**
@@ -18,12 +22,16 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JTree treeComp;
     private design.TreeView rt;
     private javax.swing.JButton groupButton, userButton,
-            positiveTweetsBtn, totalGroupsBtn, totalTweetsBtn, totalUsersBtn;
+            positiveTweetsBtn, totalGroupsBtn, totalTweetsBtn, totalUsersBtn,
+            validIDBtn;
     private javax.swing.JFrame jF;
     private javax.swing.JScrollPane jSP;
 
     private javax.swing.JTextField TweetTextfieldpos, totGroupTextfield,
             totTweetsField, totUsersField, userTextfield, groupTextfield;
+    
+    private List<User> userList = new ArrayList<>();
+    private List<GroupComposite> groupList = new ArrayList<>();
 
     private Admin() {
         initComponents();
@@ -68,6 +76,8 @@ public class Admin extends javax.swing.JFrame {
         totalGroupsBtn = new javax.swing.JButton();
         totTweetsField = new javax.swing.JTextField();
         TweetTextfieldpos = new javax.swing.JTextField();
+        validIDBtn = new javax.swing.JButton(); //validate if all the IDs used in the users and groups are valid
+        
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jF.getContentPane());
         jF.getContentPane().setLayout(jFrame1Layout);
@@ -94,7 +104,7 @@ public class Admin extends javax.swing.JFrame {
         admi.setText("Welcome to the Admin Control Panel"); //title
 
         message.setForeground(new java.awt.Color(255, 0, 0));
-        message.setHorizontalAlignment(javax.swing.SwingConstants.CENTER); //warining message
+        message.setHorizontalAlignment(javax.swing.SwingConstants.LEFT); //warining message
 
         labelUser.setText("Username:");
         labelGroup.setText("Group name:");
@@ -121,6 +131,9 @@ public class Admin extends javax.swing.JFrame {
 
         totalGroupsBtn.setText("Group total");
         totalGroupsBtn.addActionListener(this::onClicktotalGroup);
+        
+        validIDBtn.setText("Verify Valid ID");
+        validIDBtn.addActionListener(this::onClickValidID);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -134,8 +147,8 @@ public class Admin extends javax.swing.JFrame {
                                                         .addComponent(admi, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
                                                         .addGap(71, 71, 71))
                                                 .addGroup(layout.createSequentialGroup()
-                                                        .addComponent(message, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addGap(18, 18, 18))))
+                                                        .addComponent(message, javax.swing.GroupLayout.PREFERRED_SIZE, 610/*365*/, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGap(25,25,25))))
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -154,12 +167,14 @@ public class Admin extends javax.swing.JFrame {
                                                 .addGroup(layout.createSequentialGroup()
                                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                                 .addComponent(totalTweetsBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE) 
+                                                                
                                                                 .addComponent(totalUsersBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                                 .addComponent(totTweetsField) 
                                                                 .addComponent(totUsersField, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                         .addGap(41, 41, 41)
+                                                                                                                                                                                                               
                                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                                 .addComponent(positiveTweetsBtn)
                                                                 .addComponent(totalGroupsBtn))))
@@ -168,6 +183,15 @@ public class Admin extends javax.swing.JFrame {
                                                 .addComponent(totGroupTextfield) 
                                                 .addComponent(TweetTextfieldpos, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(41, 41, 41)))
+                        
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,false)
+                                                        .addComponent(validIDBtn, javax.swing.GroupLayout.DEFAULT_SIZE,101, Short.MAX_VALUE)
+                                                ))
+                        
+                        //.addComponent(validIDBtn, javax.swing.GroupLayout.DEFAULT_SIZE,javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        
+                        
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(clickableLabel)
                                 .addComponent(jSP, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -204,11 +228,13 @@ public class Admin extends javax.swing.JFrame {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                 .addComponent(totTweetsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE) //switch total tweey
                                                 .addComponent(totalTweetsBtn) 
+                                                
+                                                .addComponent(validIDBtn)
                                                 .addComponent(positiveTweetsBtn)
                                                 .addComponent(TweetTextfieldpos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(message, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(19, 19, 19))
+                                        .addGap(19, 19, 19))
         );
 
         pack();
@@ -309,6 +335,57 @@ public class Admin extends javax.swing.JFrame {
         VisitorComp cV = (VisitorComp) treeTraversal(new VisitorComp());
         totGroupTextfield.setText(String.valueOf(cV.getTotalGroups()));
     }
+    
+    public void onClickValidID(java.awt.event.ActionEvent event){
+//    VisitorComp c= (VisitorComp) treeTraversal(new VisitorComp());
+//    validIDBtn.sr
+
+        Iterator userItr = userList.iterator();
+        Iterator groupItr = groupList.iterator();
+
+                HashSet<String> userNames = new HashSet<>();
+                HashSet<String> groupNames = new HashSet<>();
+                int nonUniqueUserCtr = 0;
+                int nonUniqueGroupCtr = 0;
+                int spacesCtr = 0;
+                while (userItr.hasNext()) {
+                    String userName = userItr.next().toString();
+
+                    if (!userNames.contains(userName)) {
+                        if (userName.contains(" ")) {
+                            spacesCtr++;
+                        }
+                        userNames.add(userName);
+                    } else if (userNames.contains(userName)) {
+                        nonUniqueUserCtr += 2;
+                    } else if (userName.contains(" ")) {
+                        spacesCtr++;
+                    }
+                }
+
+                while (groupItr.hasNext()) {
+                    String key = groupItr.next().toString();
+
+
+                    if (!groupNames.contains(key)) {
+                        if (key.contains(" ")) {
+                            spacesCtr++;
+                        }
+                        groupNames.add(key);
+                    } else if (groupNames.contains(key)) {
+                        nonUniqueGroupCtr += 2;
+                    } else if (key.contains(" ")) {
+                        spacesCtr++;
+                    }
+                }
+
+
+                message.setText("Number of non-unique users: " + nonUniqueUserCtr
+                        + "\n Number of non-unique groups: " + nonUniqueGroupCtr
+                        + "\n Number of users and groups with spaces: " + spacesCtr);
+
+    
+}
 
     private void onClicktotalTweet(java.awt.event.ActionEvent event) {
         //number of tweet
@@ -329,5 +406,6 @@ public class Admin extends javax.swing.JFrame {
     public static void set(Admin aInstance) {
         ad = aInstance;
     }
+
 
 }
